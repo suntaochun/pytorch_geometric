@@ -32,6 +32,8 @@ class GCN2Conv(MessagePassing):
     Here, :math:`\alpha` models the strength of the initial residual
     connection, while :math:`\beta` models the strength of the identity
     mapping.
+    The adjacency matrix can include other values than :obj:`1` representing
+    edge weights via the optional :obj:`edge_weight` tensor.
 
     Args:
         channels (int): Size of each input and output sample.
@@ -68,7 +70,8 @@ class GCN2Conv(MessagePassing):
                  cached: bool = False, add_self_loops: bool = True,
                  normalize: bool = True, **kwargs):
 
-        super(GCN2Conv, self).__init__(aggr='add', **kwargs)
+        kwargs.setdefault('aggr', 'add')
+        super(GCN2Conv, self).__init__(**kwargs)
 
         self.channels = channels
         self.alpha = alpha

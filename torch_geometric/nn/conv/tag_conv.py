@@ -19,6 +19,8 @@ class TAGConv(MessagePassing):
 
     where :math:`\mathbf{A}` denotes the adjacency matrix and
     :math:`D_{ii} = \sum_{j=0} A_{ij}` its diagonal degree matrix.
+    The adjacency matrix can include other values than :obj:`1` representing
+    edge weights via the optional :obj:`edge_weight` tensor.
 
     Args:
         in_channels (int): Size of each input sample.
@@ -33,7 +35,8 @@ class TAGConv(MessagePassing):
     """
     def __init__(self, in_channels: int, out_channels: int, K: int = 3,
                  bias: bool = True, normalize: bool = True, **kwargs):
-        super(TAGConv, self).__init__(aggr='add', **kwargs)
+        kwargs.setdefault('aggr', 'add')
+        super(TAGConv, self).__init__(**kwargs)
 
         self.in_channels = in_channels
         self.out_channels = out_channels
